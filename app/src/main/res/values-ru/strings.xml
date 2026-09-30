@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_library">Библиотека</string>
+    <string name="nav_import">Импорт</string>
+    <string name="nav_settings">Настройки</string>
+
+    <string name="library_title">Видеообои</string>
+    <string name="library_import_action">Импортировать видео</string>
+    <string name="library_empty_title">Библиотека пуста</string>
+    <string name="library_empty_body">Добавьте ролик MP4 или WebM, чтобы превратить его в живые обои для домашнего экрана.</string>
+    <string name="library_status_active">Активные</string>
+    <string name="library_status_inactive">Неактивные</string>
+    <string name="library_action_apply">Применить</string>
+    <string name="library_action_reapply">Применить снова</string>
+    <string name="library_menu_details">Информация</string>
+    <string name="library_menu_delete">Удалить</string>
+
+    <string name="dialog_delete_title">Удалить обои?</string>
+    <string name="dialog_delete_body">%1$s будет удален из библиотеки. Это действие нельзя отменить.</string>
+    <string name="dialog_delete_confirm">Удалить</string>
+    <string name="dialog_details_title">Информация об обоях</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_close">Закрыть</string>
+
+    <string name="message_deleted">%1$s удалены</string>
+    <string name="message_engine_unavailable">Движок рендеринга еще в разработке, применение временно недоступно.</string>
+    <string name="message_picker_unavailable">Системный выбор фото недоступен на этом устройстве.</string>
+    <string name="message_video_unreadable">Не удалось прочитать это видео. Выберите другой файл.</string>
+    <string name="message_import_failed">Не удалось импортировать видео.</string>
+    <string name="message_no_browser">Не найдено приложение для открытия ссылки.</string>
+
+    <string name="picker_title">Добавить обои</string>
+    <string name="picker_prompt_title">Видео не выбрано</string>
+    <string name="picker_prompt_body">Выберите короткий зацикленный ролик из галереи. Лучше всего воспроизводится MP4 с H.264.</string>
+    <string name="picker_pick_action">Выбрать видео</string>
+    <string name="picker_change_action">Сменить видео</string>
+    <string name="picker_preview_label">Кадр превью</string>
+    <string name="picker_metadata_title">Параметры видео</string>
+    <string name="picker_scaling_title">Режим масштабирования</string>
+    <string name="picker_scaling_body">Определяет, как ролик вписывается в экран устройства.</string>
+    <string name="picker_save_action">Сохранить в библиотеку</string>
+    <string name="picker_saving_action">Сохранение</string>
+    <string name="picker_inspecting">Чтение видео</string>
+
+    <string name="scaling_center_crop">По центру</string>
+    <string name="scaling_fit_screen">По размеру экрана</string>
+    <string name="scaling_stretch">Растянуть</string>
+
+    <string name="label_file_name">Имя файла</string>
+    <string name="label_duration">Длительность</string>
+    <string name="label_resolution">Разрешение</string>
+    <string name="label_aspect_ratio">Соотношение сторон</string>
+    <string name="label_size">Размер файла</string>
+    <string name="label_scaling">Масштабирование</string>
+    <string name="value_unknown">Неизвестно</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_section_playback">Воспроизведение</string>
+    <string name="settings_section_audio">Звук</string>
+    <string name="settings_section_appearance">Оформление</string>
+    <string name="settings_section_about">О приложении</string>
+    <string name="settings_reset_on_unlock_title">Сброс видео в начало при включении экрана</string>
+    <string name="settings_reset_on_unlock_summary">Начинать ролик с начала каждый раз при включении экрана</string>
+    <string name="settings_mute_audio_title">Отключить звук на домашнем экране</string>
+    <string name="settings_mute_audio_summary">Заглушать ролик, пока виден лаунчер</string>
+    <string name="settings_theme_title">Тема</string>
+    <string name="settings_theme_system">Как в системе</string>
+    <string name="settings_theme_dark">Всегда темная</string>
+    <string name="settings_theme_light">Всегда светлая</string>
+    <string name="settings_dynamic_color_title">Цвета Material You</string>
+    <string name="settings_dynamic_color_summary">Окрашивать интерфейс в палитру ваших обоев</string>
+    <string name="settings_language_title">Язык</string>
+    <string name="settings_language_english">Английский</string>
+    <string name="settings_language_more_soon">Другие языки появятся позже</string>
+    <string name="settings_author_title">Сделано itzmr</string>
+    <string name="settings_author_summary">Исходный код на GitHub</string>
+    <string name="settings_version">Dev-сборка %1$d</string>
+
+    <string name="cd_thumbnail">Миниатюра видео</string>
+    <string name="cd_more_options">Дополнительные действия</string>
+</resources>

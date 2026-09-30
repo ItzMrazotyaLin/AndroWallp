@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="ic_video_file"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M 352 720 h 175 q 14 0 24.5 -10.5 T 562 685 v -55 l 80 46 v -152 l -80 46 v -55 q 0 -14 -10.5 -24.5 T 527 480 H 352 q -14 0 -24.5 10.5 T 317 515 v 170 q 0 14 10.5 24.5 T 352 720 Z M 229 905 q -39.05 0 -66.52 -27.47 Q 135 850.05 135 811 v -662 q 0 -39.46 27.48 -67.23 Q 189.95 54 229 54 h 363 l 234 234 v 523 q 0 39.05 -27.77 66.53 Q 770.46 905 731 905 H 229 Z m 313 -570 v -186 H 229 v 662 h 502 v -476 H 542 Z M 229 149 v 186 -186 662 -662 Z" />
+</vector>

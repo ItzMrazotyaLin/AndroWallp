@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="ic_video_camera_back_add"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M 400 480 Z M 149 825 q -39.05 0 -66.53 -27.48 Q 55 770.05 55 731 v -274 h 94 v 274 h 502 v -502 H 377 v -95 h 274 q 39.46 0 67.23 27.77 Q 746 189.54 746 229 v 206 l 160 -160 v 410 L 746 525 v 206 q 0 39.05 -27.77 66.52 Q 690.46 825 651 825 H 149 Z m 64 -202 h 385 L 472 455 l -93 120 -66 -81 -100 129 Z m -62.5 -226 v -95 H 55 v -71 h 96 v -97 h 71 v 97 h 95 v 71.5 h -95 v 94.5 h -71.5 Z" />
+</vector>
