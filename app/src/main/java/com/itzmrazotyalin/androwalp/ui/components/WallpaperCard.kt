@@ -1,5 +1,6 @@
 package com.itzmrazotyalin.androwalp.ui.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
@@ -43,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.itzmrazotyalin.androwalp.R
 import com.itzmrazotyalin.androwalp.domain.model.Wallpaper
+import com.itzmrazotyalin.androwalp.domain.model.WallpaperTarget
 import com.itzmrazotyalin.androwalp.ui.theme.ThumbnailShape
 import com.itzmrazotyalin.androwalp.ui.util.aspectRatioLabel
 import com.itzmrazotyalin.androwalp.ui.util.formatDuration
@@ -53,6 +56,7 @@ fun WallpaperCard(
     wallpaper: Wallpaper,
     onApply: () -> Unit,
     onDetails: () -> Unit,
+    onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -78,13 +82,14 @@ fun WallpaperCard(
                     shape = ThumbnailShape,
                 )
                 WallpaperStatusBadge(
-                    isActive = wallpaper.isActive,
+                    target = wallpaper.target,
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(8.dp),
                 )
                 WallpaperOverflowMenu(
                     onDetails = onDetails,
+                    onEdit = onEdit,
                     onDelete = onDelete,
                     modifier = Modifier.align(Alignment.TopEnd),
                 )
@@ -153,10 +158,11 @@ fun WallpaperCard(
 
 @Composable
 fun WallpaperStatusBadge(
-    isActive: Boolean,
+    target: WallpaperTarget,
     modifier: Modifier = Modifier,
 ) {
-    val badgeContentColor = if (isActive) {
+    val isApplied = target != WallpaperTarget.NONE
+    val badgeContentColor = if (isApplied) {
         MaterialTheme.colorScheme.onPrimary
     } else {
         MaterialTheme.colorScheme.onSurfaceVariant
@@ -164,7 +170,7 @@ fun WallpaperStatusBadge(
     Surface(
         modifier = modifier,
         shape = CircleShape,
-        color = if (isActive) {
+        color = if (isApplied) {
             MaterialTheme.colorScheme.primary
         } else {
             MaterialTheme.colorScheme.surfaceContainerHighest
@@ -175,17 +181,17 @@ fun WallpaperStatusBadge(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .clip(CircleShape)
-                    .background(badgeContentColor),
-            )
-            Spacer(modifier = Modifier.width(6.dp))
+            if (isApplied) {
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .clip(CircleShape)
+                        .background(badgeContentColor),
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+            }
             Text(
-                text = stringResource(
-                    if (isActive) R.string.library_status_active else R.string.library_status_inactive,
-                ),
+                text = stringResource(target.labelRes()),
                 style = MaterialTheme.typography.labelSmall,
                 maxLines = 1,
             )
@@ -234,6 +240,7 @@ private fun DurationBadge(
 @Composable
 private fun WallpaperOverflowMenu(
     onDetails: () -> Unit,
+    onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -266,6 +273,16 @@ private fun WallpaperOverflowMenu(
                 },
             )
             DropdownMenuItem(
+                text = { Text(text = stringResource(R.string.library_menu_edit)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Filled.Edit, contentDescription = null)
+                },
+                onClick = {
+                    expanded = false
+                    onEdit()
+                },
+            )
+            DropdownMenuItem(
                 text = { Text(text = stringResource(R.string.library_menu_delete)) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Filled.DeleteOutline, contentDescription = null)
@@ -277,4 +294,12 @@ private fun WallpaperOverflowMenu(
             )
         }
     }
+}
+
+@StringRes
+private fun WallpaperTarget.labelRes(): Int = when (this) {
+    WallpaperTarget.NONE -> R.string.library_status_inactive
+    WallpaperTarget.HOME -> R.string.library_status_home
+    WallpaperTarget.LOCK -> R.string.library_status_lock
+    WallpaperTarget.BOTH -> R.string.library_status_both
 }

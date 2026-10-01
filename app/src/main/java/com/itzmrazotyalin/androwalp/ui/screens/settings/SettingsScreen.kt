@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Replay
@@ -105,8 +106,8 @@ fun SettingsScreen(
                 SettingsSwitchRow(
                     title = stringResource(R.string.settings_reset_on_unlock_title),
                     summary = stringResource(R.string.settings_reset_on_unlock_summary),
-                    checked = settings.resetPlaybackOnUnlock,
-                    onCheckedChange = viewModel::onResetPlaybackOnUnlockChanged,
+                    checked = settings.resetOnUnlock,
+                    onCheckedChange = viewModel::onResetOnUnlockChanged,
                     icon = Icons.Filled.Replay,
                 )
             }
@@ -117,11 +118,18 @@ fun SettingsScreen(
                 style = SettingsSectionStyle.FILLED,
             ) {
                 SettingsSwitchRow(
-                    title = stringResource(R.string.settings_mute_audio_title),
-                    summary = stringResource(R.string.settings_mute_audio_summary),
-                    checked = settings.muteAudioOnHomeScreen,
-                    onCheckedChange = viewModel::onMuteAudioOnHomeScreenChanged,
+                    title = stringResource(R.string.settings_mute_home_title),
+                    summary = stringResource(R.string.settings_mute_home_summary),
+                    checked = settings.muteHome,
+                    onCheckedChange = viewModel::onMuteHomeChanged,
                     icon = Icons.AutoMirrored.Filled.VolumeOff,
+                )
+                SettingsSwitchRow(
+                    title = stringResource(R.string.settings_mute_lock_title),
+                    summary = stringResource(R.string.settings_mute_lock_summary),
+                    checked = settings.muteLock,
+                    onCheckedChange = viewModel::onMuteLockChanged,
+                    icon = Icons.Filled.Lock,
                 )
             }
 

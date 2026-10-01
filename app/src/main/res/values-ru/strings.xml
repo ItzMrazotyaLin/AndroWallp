@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="live_wallpaper_label" translatable="false">AndroWalp Video</string>
+    <string name="live_wallpaper_description">Воспроизводит видео из библиотеки как живые обои</string>
+
     <string name="nav_library">Библиотека</string>
     <string name="nav_import">Импорт</string>
     <string name="nav_settings">Настройки</string>
@@ -8,12 +11,22 @@
     <string name="library_import_action">Импортировать видео</string>
     <string name="library_empty_title">Библиотека пуста</string>
     <string name="library_empty_body">Добавьте ролик MP4 или WebM, чтобы превратить его в живые обои для домашнего экрана.</string>
-    <string name="library_status_active">Активные</string>
-    <string name="library_status_inactive">Неактивные</string>
+    <string name="library_status_home">Домашний экран</string>
+    <string name="library_status_lock">Экран блокировки</string>
+    <string name="library_status_both">Оба экрана</string>
+    <string name="library_status_inactive">Неактивно</string>
     <string name="library_action_apply">Применить</string>
     <string name="library_action_reapply">Применить снова</string>
     <string name="library_menu_details">Информация</string>
+    <string name="library_menu_edit">Изменить</string>
     <string name="library_menu_delete">Удалить</string>
+
+    <string name="apply_target_title">Установить как обои</string>
+    <string name="apply_target_body">Выберите, где применить %1$s</string>
+    <string name="apply_target_home">Домашний экран</string>
+    <string name="apply_target_lock">Экран блокировки</string>
+    <string name="apply_target_both">Оба экрана</string>
+    <string name="apply_target_confirm">Применить</string>
 
     <string name="dialog_delete_title">Удалить обои?</string>
     <string name="dialog_delete_body">%1$s будет удален из библиотеки. Это действие нельзя отменить.</string>
@@ -23,22 +36,25 @@
     <string name="action_close">Закрыть</string>
 
     <string name="message_deleted">%1$s удалены</string>
-    <string name="message_engine_unavailable">Движок рендеринга еще в разработке, применение временно недоступно.</string>
+    <string name="message_live_wallpaper_unavailable">Системный выбор живых обоев не найден на этом устройстве.</string>
     <string name="message_picker_unavailable">Системный выбор фото недоступен на этом устройстве.</string>
     <string name="message_video_unreadable">Не удалось прочитать это видео. Выберите другой файл.</string>
-    <string name="message_import_failed">Не удалось импортировать видео.</string>
     <string name="message_no_browser">Не найдено приложение для открытия ссылки.</string>
+    <string name="message_import_failed">Не удалось импортировать видео.</string>
 
     <string name="picker_title">Добавить обои</string>
+    <string name="picker_edit_title">Изменить обои</string>
     <string name="picker_prompt_title">Видео не выбрано</string>
     <string name="picker_prompt_body">Выберите короткий зацикленный ролик из галереи. Лучше всего воспроизводится MP4 с H.264.</string>
     <string name="picker_pick_action">Выбрать видео</string>
     <string name="picker_change_action">Сменить видео</string>
     <string name="picker_preview_label">Кадр превью</string>
+    <string name="picker_title_label">Название</string>
     <string name="picker_metadata_title">Параметры видео</string>
     <string name="picker_scaling_title">Режим масштабирования</string>
     <string name="picker_scaling_body">Определяет, как ролик вписывается в экран устройства.</string>
     <string name="picker_save_action">Сохранить в библиотеку</string>
+    <string name="picker_save_changes">Сохранить изменения</string>
     <string name="picker_saving_action">Сохранение</string>
     <string name="picker_inspecting">Чтение видео</string>
 
@@ -61,8 +77,10 @@
     <string name="settings_section_about">О приложении</string>
     <string name="settings_reset_on_unlock_title">Сброс видео в начало при включении экрана</string>
     <string name="settings_reset_on_unlock_summary">Начинать ролик с начала каждый раз при включении экрана</string>
-    <string name="settings_mute_audio_title">Отключить звук на домашнем экране</string>
-    <string name="settings_mute_audio_summary">Заглушать ролик, пока виден лаунчер</string>
+    <string name="settings_mute_home_title">Отключить звук на домашнем экране</string>
+    <string name="settings_mute_home_summary">Заглушать ролик, пока виден лаунчер</string>
+    <string name="settings_mute_lock_title">Отключить звук на экране блокировки</string>
+    <string name="settings_mute_lock_summary">Заглушать ролик, пока устройство заблокировано</string>
     <string name="settings_theme_title">Тема</string>
     <string name="settings_theme_system">Как в системе</string>
     <string name="settings_theme_dark">Всегда темная</string>

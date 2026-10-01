@@ -1,5 +1,9 @@
 package com.itzmrazotyalin.androwalp.ui.screens.picker
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,8 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -48,14 +51,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.itzmrazotyalin.androwalp.R
-import com.itzmrazotyalin.androwalp.domain.model.VideoMetadata
 import com.itzmrazotyalin.androwalp.domain.model.WallpaperScaling
 import com.itzmrazotyalin.androwalp.ui.components.DetailRow
 import com.itzmrazotyalin.androwalp.ui.components.ScalingChipRow
@@ -68,14 +73,20 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PickerScreen(
+    wallpaperId: String,
     onSaved: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PickerViewModel = viewModel(factory = PickerViewModel.Factory),
+    viewModel: PickerViewModel = viewModel(
+        key = wallpaperId.ifBlank { NEW_VIDEO_KEY },
+        factory = PickerViewModel.factory(wallpaperId),
+    ),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val scalingMode by viewModel.scalingMode.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val video = uiState.video
 
     val pickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -100,11 +111,27 @@ fun PickerScreen(
         }
     }
 
+    LaunchedEffect(wallpaperId) {
+        if (wallpaperId.isBlank()) {
+            viewModel.onVideoCleared()
+        }
+    }
+
+    val videoPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { },
+    )
+
+    LaunchedEffect(Unit) {
+        if (!hasVideoReadPermission(context)) {
+            videoPermissionLauncher.launch(videoReadPermission())
+        }
+    }
+
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
                 is PickerEvent.Saved -> onSaved()
-
                 PickerEvent.ReadFailed -> snackbarHostState.showSnackbar(
                     context.getString(R.string.message_video_unreadable),
                 )
@@ -122,7 +149,17 @@ fun PickerScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.picker_title)) },
+                title = {
+                    Text(
+                        text = stringResource(
+                            if (video?.isEditMode == true) {
+                                R.string.picker_edit_title
+                            } else {
+                                R.string.picker_title
+                            },
+                        ),
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             )
         },
@@ -135,20 +172,29 @@ fun PickerScreen(
                 .padding(all = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            val metadata = uiState.metadata
-            if (metadata == null) {
+            if (video == null) {
                 PickerPrompt(
                     isLoading = uiState.isInspecting,
                     onPickClick = launchPicker,
                 )
             } else {
                 VideoPreviewCard(
-                    metadata = metadata,
-                    onChangeClick = launchPicker,
+                    previewPath = video.previewPath,
+                    durationMs = video.durationMs,
+                    onChangeClick = launchPicker.takeIf { !video.isEditMode },
                 )
-                VideoMetadataCard(metadata = metadata)
+                OutlinedTextField(
+                    value = video.title,
+                    onValueChange = viewModel::onTitleChanged,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = stringResource(R.string.picker_title_label)) },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                )
+                VideoMetadataCard(video = video)
                 ScalingSelectorCard(
-                    selected = uiState.scaling,
+                    selected = scalingMode,
                     onSelected = viewModel::onScalingSelected,
                 )
                 Button(
@@ -168,12 +214,20 @@ fun PickerScreen(
                         Text(text = stringResource(R.string.picker_saving_action))
                     } else {
                         Icon(
-                            imageVector = Icons.Filled.Add,
+                            painter = painterResource(id = R.drawable.ic_video_camera_back_add),
                             contentDescription = null,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = stringResource(R.string.picker_save_action))
+                        Text(
+                            text = stringResource(
+                                if (video.isEditMode) {
+                                    R.string.picker_save_changes
+                                } else {
+                                    R.string.picker_save_action
+                                },
+                            ),
+                        )
                     }
                 }
             }
@@ -201,7 +255,7 @@ private fun PickerPrompt(
                 Spacer(modifier = Modifier.height(16.dp))
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             } else {
-Icon(
+                Icon(
                     painter = painterResource(id = R.drawable.ic_video_camera_back_add),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
@@ -222,7 +276,7 @@ Icon(
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-Button(onClick = onPickClick) {
+                Button(onClick = onPickClick) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_video_camera_back_add),
                         contentDescription = null,
@@ -238,8 +292,9 @@ Button(onClick = onPickClick) {
 
 @Composable
 private fun VideoPreviewCard(
-    metadata: VideoMetadata,
-    onChangeClick: () -> Unit,
+    previewPath: String?,
+    durationMs: Long,
+    onChangeClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -256,32 +311,35 @@ private fun VideoPreviewCard(
                     .aspectRatio(16f / 9f),
             ) {
                 VideoThumbnail(
-                    filePath = metadata.previewPath,
+                    filePath = previewPath,
                     contentDescription = stringResource(R.string.picker_preview_label),
                     modifier = Modifier.fillMaxSize(),
                     shape = MaterialTheme.shapes.large,
                 )
-                SurfaceDurationBadge(
-                    durationMs = metadata.durationMs,
+                Surface(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(8.dp),
-                )
+                    shape = CircleShape,
+                    color = Color.Black.copy(alpha = 0.6f),
+                    contentColor = Color.White,
+                ) {
+                    Text(
+                        text = formatDuration(durationMs),
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                    )
+                }
             }
-            Row(
-                modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = metadata.displayName,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f),
-                )
-                TextButton(onClick = onChangeClick) {
-                    Text(text = stringResource(R.string.picker_change_action))
+            if (onChangeClick != null) {
+                Row(
+                    modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextButton(onClick = onChangeClick) {
+                        Text(text = stringResource(R.string.picker_change_action))
+                    }
                 }
             }
         }
@@ -290,7 +348,7 @@ private fun VideoPreviewCard(
 
 @Composable
 private fun VideoMetadataCard(
-    metadata: VideoMetadata,
+    video: EditableVideo,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -309,20 +367,20 @@ private fun VideoMetadataCard(
             )
             DetailRow(
                 label = stringResource(R.string.label_file_name),
-                value = metadata.displayName,
+                value = video.displayName,
             )
             DetailRow(
                 label = stringResource(R.string.label_duration),
-                value = formatDuration(metadata.durationMs),
+                value = formatDuration(video.durationMs),
             )
             DetailRow(
                 label = stringResource(R.string.label_resolution),
-                value = formatResolution(metadata.width, metadata.height)
+                value = formatResolution(video.width, video.height)
                     ?: stringResource(R.string.value_unknown),
             )
             DetailRow(
                 label = stringResource(R.string.label_size),
-                value = formatFileSize(metadata.sizeBytes),
+                value = formatFileSize(video.sizeBytes),
             )
         }
     }
@@ -361,21 +419,17 @@ private fun ScalingSelectorCard(
     }
 }
 
-@Composable
-private fun SurfaceDurationBadge(
-    durationMs: Long,
-    modifier: Modifier = Modifier,
-) {
-    androidx.compose.material3.Surface(
-        modifier = modifier,
-        shape = CircleShape,
-        color = Color.Black.copy(alpha = 0.6f),
-        contentColor = Color.White,
-    ) {
-        Text(
-            text = formatDuration(durationMs),
-            style = MaterialTheme.typography.labelSmall,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-        )
+private const val NEW_VIDEO_KEY = "new_video"
+
+private fun videoReadPermission(): String =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_VIDEO
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
     }
-}
+
+private fun hasVideoReadPermission(context: Context): Boolean =
+    ContextCompat.checkSelfPermission(context, videoReadPermission()) ==
+        PackageManager.PERMISSION_GRANTED
+
+private val TextOverflowUnused = TextOverflow.Ellipsis

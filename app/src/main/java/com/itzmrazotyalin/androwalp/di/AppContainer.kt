@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.itzmrazotyalin.androwalp.data.settings.SettingsRepository
+import com.itzmrazotyalin.androwalp.data.settings.WallpaperRecordStore
 import com.itzmrazotyalin.androwalp.data.wallpaper.VideoImporter
 import com.itzmrazotyalin.androwalp.data.wallpaper.WallpaperRepository
 import kotlinx.coroutines.CoroutineScope
@@ -22,10 +23,17 @@ class AppContainer(application: Application) {
 
     val settingsRepository: SettingsRepository by lazy { SettingsRepository(application) }
 
+    val wallpaperRecordStore: WallpaperRecordStore by lazy { WallpaperRecordStore(application) }
+
     val videoImporter: VideoImporter by lazy { VideoImporter(application) }
 
     val wallpaperRepository: WallpaperRepository by lazy {
-        WallpaperRepository(videoImporter, applicationScope)
+        WallpaperRepository(
+            videoImporter = videoImporter,
+            settingsRepository = settingsRepository,
+            recordStore = wallpaperRecordStore,
+            applicationScope = applicationScope,
+        )
     }
 }
 

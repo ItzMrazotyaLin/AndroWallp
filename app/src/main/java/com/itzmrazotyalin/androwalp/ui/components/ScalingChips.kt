@@ -20,7 +20,7 @@ import com.itzmrazotyalin.androwalp.domain.model.WallpaperScaling
 @StringRes
 fun scalingLabelRes(scaling: WallpaperScaling): Int = when (scaling) {
     WallpaperScaling.CENTER_CROP -> R.string.scaling_center_crop
-    WallpaperScaling.FIT_SCREEN -> R.string.scaling_fit_screen
+    WallpaperScaling.FIT_XY -> R.string.scaling_fit_screen
     WallpaperScaling.STRETCH -> R.string.scaling_stretch
 }
 

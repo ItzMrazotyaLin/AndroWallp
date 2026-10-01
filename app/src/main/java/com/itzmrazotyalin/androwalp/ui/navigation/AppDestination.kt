@@ -8,12 +8,23 @@ import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.itzmrazotyalin.androwalp.R
 
+private const val IMPORT_ROUTE_PATTERN = "import?wallpaperId={wallpaperId}"
+
 enum class AppDestination(
     val route: String,
     @get:StringRes val labelRes: Int,
     val icon: ImageVector,
 ) {
     LIBRARY(route = "library", labelRes = R.string.nav_library, icon = Icons.Filled.VideoLibrary),
-    IMPORT(route = "import", labelRes = R.string.nav_import, icon = Icons.Filled.AddPhotoAlternate),
+    IMPORT(route = IMPORT_ROUTE_PATTERN, labelRes = R.string.nav_import, icon = Icons.Filled.AddPhotoAlternate),
     SETTINGS(route = "settings", labelRes = R.string.nav_settings, icon = Icons.Filled.Settings),
+    ;
+
+    companion object {
+
+        const val WALLPAPER_ID_ARG = "wallpaperId"
+
+        fun importRoute(wallpaperId: String? = null): String =
+            if (wallpaperId.isNullOrBlank()) "import" else "import?$WALLPAPER_ID_ARG=$wallpaperId"
+    }
 }

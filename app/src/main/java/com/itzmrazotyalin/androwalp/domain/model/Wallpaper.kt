@@ -2,10 +2,39 @@ package com.itzmrazotyalin.androwalp.domain.model
 
 import java.util.UUID
 
-enum class WallpaperScaling {
-    CENTER_CROP,
-    FIT_SCREEN,
-    STRETCH,
+enum class WallpaperTarget {
+    NONE,
+    HOME,
+    LOCK,
+    BOTH,
+    ;
+
+    companion object {
+
+        fun fromPaths(homePath: String?, lockPath: String?, filePath: String): WallpaperTarget {
+            val onHome = homePath != null && homePath == filePath
+            val onLock = lockPath != null && lockPath == filePath
+            return when {
+                onHome && onLock -> BOTH
+                onHome -> HOME
+                onLock -> LOCK
+                else -> NONE
+            }
+        }
+    }
+}
+
+enum class WallpaperScaling(val storageKey: String) {
+    CENTER_CROP(storageKey = "CENTER_CROP"),
+    FIT_XY(storageKey = "FIT_XY"),
+    STRETCH(storageKey = "STRETCH"),
+    ;
+
+    companion object {
+
+        fun fromStorageKey(storageKey: String?): WallpaperScaling =
+            entries.firstOrNull { it.storageKey == storageKey } ?: CENTER_CROP
+    }
 }
 
 data class VideoMetadata(
@@ -29,7 +58,7 @@ data class Wallpaper(
     val height: Int,
     val sizeBytes: Long,
     val mimeType: String?,
-    val scaling: WallpaperScaling,
     val isActive: Boolean = false,
+    val target: WallpaperTarget = WallpaperTarget.NONE,
     val importedAt: Long = System.currentTimeMillis(),
 )

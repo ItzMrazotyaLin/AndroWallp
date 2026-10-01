@@ -25,12 +25,16 @@ class SettingsViewModel(
             initialValue = SettingsUiState(),
         )
 
-    fun onResetPlaybackOnUnlockChanged(enabled: Boolean) {
-        viewModelScope.launch { settingsRepository.setResetPlaybackOnUnlock(enabled) }
+    fun onResetOnUnlockChanged(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setResetOnUnlock(enabled) }
     }
 
-    fun onMuteAudioOnHomeScreenChanged(enabled: Boolean) {
-        viewModelScope.launch { settingsRepository.setMuteAudioOnHomeScreen(enabled) }
+    fun onMuteHomeChanged(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setMuteHome(enabled) }
+    }
+
+    fun onMuteLockChanged(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setMuteLock(enabled) }
     }
 
     fun onUseDynamicColorChanged(enabled: Boolean) {

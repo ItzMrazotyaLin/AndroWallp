@@ -5,20 +5,25 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.itzmrazotyalin.androwalp.R
+import com.itzmrazotyalin.androwalp.data.settings.SettingsRepository
 import com.itzmrazotyalin.androwalp.data.wallpaper.WallpaperRepository
 import com.itzmrazotyalin.androwalp.di.appContainer
 import com.itzmrazotyalin.androwalp.domain.model.Wallpaper
+import com.itzmrazotyalin.androwalp.domain.model.WallpaperTarget
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LibraryViewModel(
     private val wallpaperRepository: WallpaperRepository,
+    settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LibraryUiState())
@@ -28,19 +33,35 @@ class LibraryViewModel(
     val events: Flow<LibraryEvent> = _events.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
-            wallpaperRepository.wallpapers.collect { wallpapers ->
+        wallpaperRepository.wallpapers
+            .onEach { wallpapers ->
                 _uiState.update { state ->
                     state.copy(isLoading = false, wallpapers = wallpapers)
                 }
             }
-        }
+            .launchIn(viewModelScope)
+
+        settingsRepository.wallpaperConfig
+            .onEach { config ->
+                _uiState.update { state -> state.copy(scalingMode = config.scalingMode) }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onApplySelected(wallpaper: Wallpaper) {
+        _uiState.update { state -> state.copy(applyTarget = wallpaper) }
+    }
+
+    fun onApplyTargetDismissed() {
+        _uiState.update { state -> state.copy(applyTarget = null) }
+    }
+
+    fun onApplyTargetConfirmed(target: WallpaperTarget) {
+        val wallpaper = _uiState.value.applyTarget ?: return
+        _uiState.update { state -> state.copy(applyTarget = null) }
         viewModelScope.launch {
-            wallpaperRepository.setActive(wallpaper.id)
-            _events.send(LibraryEvent.ShowMessage(R.string.message_engine_unavailable))
+            wallpaperRepository.setActive(wallpaper.id, target)
+            _events.send(LibraryEvent.ApplyLiveWallpaper(target))
         }
     }
 
@@ -72,7 +93,12 @@ class LibraryViewModel(
     companion object {
 
         val Factory = viewModelFactory {
-            initializer { LibraryViewModel(appContainer.wallpaperRepository) }
+            initializer {
+                LibraryViewModel(
+                    wallpaperRepository = appContainer.wallpaperRepository,
+                    settingsRepository = appContainer.settingsRepository,
+                )
+            }
         }
     }
 }
