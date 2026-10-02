@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="live_wallpaper_label" translatable="false">AndroWalp Video</string>
+    <string name="live_wallpaper_label" translatable="false">AndroWallp Video</string>
     <string name="live_wallpaper_description">Воспроизводит видео из библиотеки как живые обои</string>
 
     <string name="nav_library">Библиотека</string>
@@ -11,7 +11,7 @@
     <string name="library_import_action">Импортировать видео</string>
     <string name="library_empty_title">Библиотека пуста</string>
     <string name="library_empty_body">Добавьте ролик MP4 или WebM, чтобы превратить его в живые обои для домашнего экрана.</string>
-    <string name="library_status_home">Домашний экран</string>
+<string name="library_status_home">Домашний экран</string>
     <string name="library_status_lock">Экран блокировки</string>
     <string name="library_status_both">Оба экрана</string>
     <string name="library_status_inactive">Неактивно</string>
@@ -21,12 +21,11 @@
     <string name="library_menu_edit">Изменить</string>
     <string name="library_menu_delete">Удалить</string>
 
-    <string name="apply_target_title">Установить как обои</string>
-    <string name="apply_target_body">Выберите, где применить %1$s</string>
+    <string name="apply_target_title">Куда применить</string>
+    <string name="apply_target_body">Выберите экран для %1$s</string>
     <string name="apply_target_home">Домашний экран</string>
     <string name="apply_target_lock">Экран блокировки</string>
     <string name="apply_target_both">Оба экрана</string>
-    <string name="apply_target_confirm">Применить</string>
 
     <string name="dialog_delete_title">Удалить обои?</string>
     <string name="dialog_delete_body">%1$s будет удален из библиотеки. Это действие нельзя отменить.</string>
@@ -92,6 +91,8 @@
     <string name="settings_language_more_soon">Другие языки появятся позже</string>
     <string name="settings_author_title">Сделано itzmr</string>
     <string name="settings_author_summary">Исходный код на GitHub</string>
+    <string name="settings_report_issue_title">Сообщить о проблеме</string>
+    <string name="settings_report_issue_summary">Открыть GitHub Issues</string>
     <string name="settings_version">Dev-сборка %1$d</string>
 
     <string name="cd_thumbnail">Миниатюра видео</string>

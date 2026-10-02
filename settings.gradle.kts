@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AndroWalp"
+rootProject.name = "AndroWallp"
 include(":app")

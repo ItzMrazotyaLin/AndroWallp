@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">AndroWalp</string>
-    <string name="live_wallpaper_label" translatable="false">AndroWalp Video</string>
+    <string name="app_name" translatable="false">AndroWallp</string>
+    <string name="live_wallpaper_label" translatable="false">AndroWallp Video</string>
     <string name="live_wallpaper_description">Plays a video from your library as a live wallpaper</string>
 
     <string name="nav_library">Library</string>
@@ -12,7 +12,7 @@
     <string name="library_import_action">Import video</string>
     <string name="library_empty_title">Your library is empty</string>
     <string name="library_empty_body">Add an MP4 or WebM clip to turn it into a live wallpaper for your home screen.</string>
-    <string name="library_status_home">Home Screen</string>
+<string name="library_status_home">Home Screen</string>
     <string name="library_status_lock">Lock Screen</string>
     <string name="library_status_both">Both Screens</string>
     <string name="library_status_inactive">Inactive</string>
@@ -22,12 +22,11 @@
     <string name="library_menu_edit">Edit</string>
     <string name="library_menu_delete">Delete</string>
 
-    <string name="apply_target_title">Set as wallpaper</string>
-    <string name="apply_target_body">Choose where %1$s should be applied</string>
+    <string name="apply_target_title">Apply to</string>
+    <string name="apply_target_body">Choose a screen for %1$s</string>
     <string name="apply_target_home">Home Screen</string>
     <string name="apply_target_lock">Lock Screen</string>
     <string name="apply_target_both">Both Screens</string>
-    <string name="apply_target_confirm">Apply</string>
 
     <string name="dialog_delete_title">Delete wallpaper?</string>
     <string name="dialog_delete_body">%1$s will be removed from your library. This cannot be undone.</string>
@@ -93,6 +92,8 @@
     <string name="settings_language_more_soon">More languages are coming soon</string>
     <string name="settings_author_title">Made by itzmr</string>
     <string name="settings_author_summary">View the source code on GitHub</string>
+    <string name="settings_report_issue_title">Report an issue</string>
+    <string name="settings_report_issue_summary">Open GitHub Issues</string>
     <string name="settings_version">Dev Build %1$d</string>
 
     <string name="cd_thumbnail">Video thumbnail</string>
